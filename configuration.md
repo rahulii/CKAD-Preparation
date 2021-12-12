@@ -13,13 +13,14 @@ all priviliges: --privilliged flag
 
 **Kubernetes Security**
 To apply security context at a pod level , use
+```yaml
 spec:
   securityContext:
     runAsUser: 1000
     
     capabilities:
       add: ["MAC_ADMIN"]
-      
+```
 
 **Resource Requirements**
 Every pod consumes a set of resources - vCPU , memory and disk space
@@ -27,6 +28,7 @@ K8s scheduler decides which node a pod goes to .
 By default: cpu: 0.5 and memory: 256Mi (Mebibyte)
 When a scheduler tries to place a pod on the node it checks if the sufficient amount of these are available
 pod.yaml
+```yaml
 spec:
   resources:
     requests:
@@ -35,7 +37,8 @@ spec:
      limits:
       memory: "2Gi"
       cpu: 2
-      
+```
+
 1 Gb = 1k MB
 1 Gi = 1024 Mi
 
