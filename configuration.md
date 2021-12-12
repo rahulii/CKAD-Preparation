@@ -43,5 +43,36 @@ spec:
 1 Gi = 1024 Mi
 
 
+**Service Account**
 
+There are 2 types of user in k8s: User Account and Service Account
+Service Accounts are used by applications to interact with k8s api server, for eg Prometheus uses Service Account to poll k8s
+In order for any application to talk to kube-api-server it needs to be authenticated. For authentication , we use service accounts
+
+By default a pod mounts a default service account.
+To use different service account , use
+```yaml
+serviceAccountName: dashboard-sa
+```
+ **Taints and Tolerations**
+ Taints and Tolerations are used to restrict , what pods can be scheduled on which nodes
+ Taints are applied to Nodes
+ Tolerations are applied to pods
       
+`kubectl taint nodes  node-name key=value:taint-effect`
+taint-effect: what happens to this pod , if they DO NOT Tolerate this taint
+NoSchedule - scheduler will not schedule any new pods that do not tolerate the taint.
+PreferNoSchedule - scheduler will try to not schedule
+NoExecute - scheduler will not schedule any new pods that do not tolerate the taint and Existing pods that do not tolerate the taint will also be evicted
+eg: kubectl taint nodes node-1 app=blue:NoSchedule
+
+To apply tolerations to pods:
+```yaml
+spec:
+  tolerations:
+    - key: "app"
+      operator: "Equal"
+      value: "blue"
+      effect: NoSchedule
+```
+Taints and Tolerations only restrict the pods , but it does not gurantee that the pods will be scheduled on a particular node.
