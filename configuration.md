@@ -76,3 +76,42 @@ spec:
       effect: NoSchedule
 ```
 Taints and Tolerations only restrict the pods , but it does not gurantee that the pods will be scheduled on a particular node.
+
+**node Selectors**
+When we want to place a pod on a particular node , one of the ways is to use nodeSelectors
+```yaml
+spec:
+  nodeSelector:
+    size: Large
+```
+where size=Large is a label on a node
+How to label a node?
+k label node <node_name> size=Large
+
+The scheduler uses this labels to identify and match the nodes
+
+Node Selectors cannot be used , when our requirement is much more complex
+For eg: place a pod on Large OR Medium Nodes , or NOT on small Nodes
+
+For this Node Affinity and Anti-Affinity features were introduced.
+
+**Node Affinity**
+The Primary feature of node affinity features are to ensure that the pods are hosted on a particular nodes
+Node Affinity Types: describe the behaviour of a scheduler wrt to a pod 
+ - requiredDuringSchedulingIgnoredDuringExecution
+ - preferredDuringSchedulingIgnoredDuringExecution
+
+```yaml
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+         - matchExpressions:
+          - key: size
+            operator: In
+            values: 
+            - Large
+            
+```
+Other Operators: NotIn , Exists
